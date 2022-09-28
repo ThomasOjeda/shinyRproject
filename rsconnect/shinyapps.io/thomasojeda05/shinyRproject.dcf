@@ -1,0 +1,13 @@
+name: shinyRproject
+title: shinyRproject
+username:
+account: thomasojeda05
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 7135712
+bundleId: 6343753
+url: https://thomasojeda05.shinyapps.io/shinyRproject/
+when: 1664293324.66854
+lastSyncTime: 1664293324.66855
+asMultiple: FALSE
+asStatic: FALSE
