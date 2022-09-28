@@ -5,9 +5,10 @@ account: thomasojeda05
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 7135712
-bundleId: 6343753
+bundleId: 6348507
 url: https://thomasojeda05.shinyapps.io/shinyRproject/
-when: 1664293324.66854
-lastSyncTime: 1664293324.66855
+when: 1664393276.7726
+lastSyncTime: 1664393276.77261
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: ~$datos migraciones ofuscado.xlsx|~$exactas.xlsx|agronomia.xlsx|arte.xlsx|datos migraciones ofuscado.xlsx|derecho.xlsx|economicas.xlsx|humanas.xlsx|ingenieria.xlsx|quequen.xlsx|salud.xlsx|sociales(mal_formato).xlsx|veterinarias.xlsx
