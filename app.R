@@ -8,28 +8,36 @@
 #
 
 library(shiny)
-install.packages("migest")
+library(GGally)
+
+library(network)
+library(sna)
+library(ggplot2)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
 
         mainPanel(
-           tableOutput("migrat")
+           plotOutput("migrat")
         )
     )
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
 
-    output$exaData <- renderTable({
-      source("loadExaDataset.R")
-      head(exa)
-    })
-    
     
     output$migrat <- renderPlot({
-      mat <- rbind(c(1,1,1),c(2,2,2),c(1,1,1))
-      migest.mig_chord(mat)
+
+      
+      graph = rbind(c(0,2,1),c(0,0,3),c(0,0,0))
+      
+      colnames(graph) = c("ing sistemas","tudai","ambiental")
+      rownames(graph) = c("ing sistemas","tudai","ambiental")
+      net = network(graph, directed = TRUE)
+      
+      return (ggnet2(net, mode ="circle", arrow.gap = 0.03, arrow.size = 5, label = TRUE, edge.size = c(graph)[c(graph) > 0]))
+      
+      
     })
 }
 
