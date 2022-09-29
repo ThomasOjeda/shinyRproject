@@ -25,15 +25,19 @@ h <- hash()
 
   for (i in 1:nrow(exa)) {
     
-    if (is.null(h[[exa[i,"Id ofuscado"]]])) {
-      h[[exa[i,"Id ofuscado"]]] = list(exa[i, "CARRERA"])
+    if (is.null(h[[toString(exa[i,"Id ofuscado"])]])) {
+      h[[toString(exa[i,"Id ofuscado"])]] = list(exa[i, "CARRERA"])
     }
     else {
-      h[[exa[i,"Id ofuscado"]]] = list.append(h[[exa[i,"Id ofuscado"]]],list(exa[i, "CARRERA"]))
+      h[[toString(exa[i,"Id ofuscado"])]] = list.append(h[[toString(exa[i,"Id ofuscado"])]],list(exa[i, "CARRERA"]))
     }
   }
 
-h[[toString(exa[1,"Id ofuscado"])]]
+str(h)
+
+str(h[[toString(exa[2,"Id ofuscado"])]])
+
+
 
 
 
