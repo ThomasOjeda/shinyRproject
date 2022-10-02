@@ -29,13 +29,9 @@ server <- function(input, output) {
     output$migrat <- renderPlot({
 
       
-      graph = rbind(c(0,2,1),c(0,0,3),c(0,0,0))
+      source("loadExaDataset.R")
       
-      colnames(graph) = c("ing sistemas","tudai","ambiental")
-      rownames(graph) = c("ing sistemas","tudai","ambiental")
-      net = network(graph, directed = TRUE)
-      
-      return (ggnet2(net, mode ="circle", arrow.gap = 0.03, arrow.size = 5, label = TRUE, edge.size = c(graph)[c(graph) > 0]))
+      return (current_plot)
       
       
     })
