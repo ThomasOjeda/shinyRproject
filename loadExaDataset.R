@@ -14,6 +14,10 @@ exa = exa[,c("Id ofuscado","CARRERA","SEXO","TIPO","INGRESO","CALIDAD","FINALES 
 
 exa[exa$CARRERA == "NA","CARRERA"] = "sin_carrera"
 
+
+
+exa = subset(exa, SEXO=="M")
+
 student_distribuion_unsorted = exa %>% count(CARRERA)
 
 student_distribuion_sorted = arrange(student_distribuion_unsorted,CARRERA)
@@ -88,28 +92,7 @@ graph
 
 edge_color = colors()[floor(runif(length(c(graph)[c(graph) > 0]), min=1, max=length(colors())))]
 node_color = colors()[floor(runif(length(acronym_sorted_degree_list), min=1, max=length(colors())))]
-current_plot = ggnet2(net, edge.size = log(c(graph)[c(graph) > 0] + 1), edge.color = edge_color, node.size = log(vertex_size +1), node.label =acronym_sorted_degree_list, node.color = node_color)
+current_plot = ggnet2(net,mode="circle", edge.size = log(c(graph)[c(graph) > 0] + 1), edge.color = edge_color, node.size = log(vertex_size +1), node.label =acronym_sorted_degree_list, node.color = node_color)
 current_plot
-
-
-install.packages("igraph")
-install.packages("networkD3")
-
-library(igraph)
-library(networkD3)
-
-# create a dataset:
-data <- data_frame(
-  from=c("A", "A", "B", "D", "C", "D", "E", "B", "C", "D", "K", "A", "M"),
-  to=c("B", "E", "F", "A", "C", "A", "B", "Z", "A", "C", "A", "B", "K")
-)
-
-p <- simpleNetwork(data, height="100px", width="100px")
-
-E(ggraph)$weight = 
-
-ggraph = graph_from_adjacency_matrix(graph, weighted =  TRUE)
-
-plot(ggraph, edge.width = (E(ggraph)$weight))
 
 
