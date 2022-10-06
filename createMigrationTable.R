@@ -1,3 +1,6 @@
+library(hash)
+library(dplyr)
+
 createMigrationTable = function (target,delta) {
   
   hashed_data = readRDS("exa_hashed_data.RDS")
