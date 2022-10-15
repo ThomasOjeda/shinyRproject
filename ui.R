@@ -1,6 +1,3 @@
-library(markdown)
-
-student_distribution_sorted = readRDS("exa_student_distribution.RDS")
 
 ui = navbarPage("Estadisticas de Migraciones",
 
@@ -8,26 +5,36 @@ ui = navbarPage("Estadisticas de Migraciones",
                 tabPanel("Migraciones",
                          sidebarLayout(
                            sidebarPanel(
+                             uiOutput("migrations_unit_selector"),
                              helpText("Seleccione un rango de años"),
-                             
-                             sliderInput("start_year", 
-                                         label = "Año de comienzo",
-                                         min = as.numeric(colnames(student_distribution_sorted)[2]), 
-                                         max = as.numeric(colnames(student_distribution_sorted)[ncol(student_distribution_sorted)]), 
-                                         value = as.numeric(colnames(student_distribution_sorted)[ncol(student_distribution_sorted)])) ,
+                             uiOutput("migration_range_selectors") ,
                              sliderInput("delta", 
                                          label = "Delta",
                                          min = 0, max = 6, value = 0)
                            ),
                            
                            mainPanel( fluidPage(
+                             h3("Informacion de migraciones"),
                              tableOutput("migration_data"),
-                             
+                             h3("De las migraciones, porcentaje perteneciente a cada carrera"),
+                    
                              plotOutput("migration_pie_chart")                   
                                                 
                                                 ))
                            
                          )
+           ),
+           tabPanel("Historico de migraciones por carrera",
+                    sidebarLayout(
+                      sidebarPanel(
+                        uiOutput("unit_hist_selector"),
+                        uiOutput("degree_hist_selector")
+                      ),
+                      mainPanel(
+                        plotOutput("migration_history", width = "80%", height = "700px")
+                      )
+                    )
+                      
            ),
            tabPanel("Red",
                     plotOutput("network")

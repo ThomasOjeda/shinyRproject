@@ -1,10 +1,14 @@
 library(hash)
 library(dplyr)
 
-createMigrationTable = function (target,delta) {
+is.nan.data.frame <- function(x)
+  do.call(cbind, lapply(x, is.nan))
+
+createMigrationTable = function (hashed_data,student_distribution_sorted,target=2022,delta=0) {
   
-  hashed_data = readRDS("exa_hashed_data.RDS")
-  student_distribution_sorted = readRDS("exa_student_distribution.RDS")
+  
+  #hashed_data = readRDS("exa_hashed_data.RDS")
+  #student_distribution_sorted = readRDS("exa_student_distribution.RDS")
   
   #moving_students_graph = matrix(0,length(student_distribution_sorted$CARRERA),length(student_distribution_sorted$CARRERA))
   
@@ -22,8 +26,7 @@ createMigrationTable = function (target,delta) {
   for (k in keys(hashed_data))
     if (length(hashed_data[[k]][["inscriptions"]]) > 1) {
       
-      #generar estadisticas de alumnos inscritos en mas de una carrera en un rango de años
-      
+
       lowerind = -1
       
       for (i in 1:(length(hashed_data[[k]][["inscriptions"]])))
@@ -33,11 +36,11 @@ createMigrationTable = function (target,delta) {
         }
       
       if (lowerind > -1 && lowerind < length(hashed_data[[k]][["inscriptions"]])) {
-        
+        deg = hashed_data[[k]][["inscriptions"]][[lowerind]][["degree"]]
+        ##agregar una matriz para saber a donde migro
         for (upperind in (lowerind+1):(length(hashed_data[[k]][["inscriptions"]])))
           if (between(hashed_data[[k]][["inscriptions"]][[upperind]][["year"]],target_year,target_year+delta_year)) {
-            migration_data[[hashed_data[[k]][["inscriptions"]][[lowerind]][["degree"]]]] = 
-              migration_data[[hashed_data[[k]][["inscriptions"]][[lowerind]][["degree"]]]] + 1
+            migration_data[[deg]] = migration_data[[deg]] + 1
             break
           }
         else{
@@ -47,24 +50,34 @@ createMigrationTable = function (target,delta) {
     }
   
   
-  migration_data = migration_data / student_distribution_sorted[,toString(target_year)]
+  migration_data_frame = (migration_data / student_distribution_sorted[,toString(target_year)]) * 100
   
-  migration_data$Carrera = student_distribution_sorted$CARRERA
+  migration_data_frame$Carrera = student_distribution_sorted$CARRERA
   
-  migration_data= migration_data[, c(2,1)]
+  migration_data_frame$Cantidad_de_Migraciones = migration_data
   
-  colnames(migration_data) [2] = "% de alumnos que se han inscrito a otra carrera en el periodo"
+  migration_data_frame$Cantidad_de_Inscriptos = data.frame(student_distribution_sorted[,toString(target_year)])
+  
+  migration_data_frame= migration_data_frame[, c(2,3,4,1)]
+  
+  
+  colnames(migration_data_frame) [1] = "Carrera"
+  colnames(migration_data_frame) [2] = "Migraciones"
+  colnames(migration_data_frame) [3] = "Inscritos"
+  colnames(migration_data_frame) [4] = "% de migracion"
+  
+
   
   #Como hay carreras que no tienen alumnos inscriptos en el año, puede que se divida por cero, a continuacion se 
   #limpia el resultado de dichas divisiones.
+
   
-  is.nan.data.frame <- function(x)
-    do.call(cbind, lapply(x, is.nan))
+  migration_data_frame[is.nan(migration_data_frame)] = 0
   
-  migration_data[is.nan(migration_data)] = 0
+
   
-  return(migration_data)
+  
+  return(migration_data_frame)
 } 
 
-createMigrationTable(2022,0)
 
