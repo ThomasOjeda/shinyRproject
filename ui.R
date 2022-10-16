@@ -10,7 +10,7 @@ ui = navbarPage("Estadisticas de Migraciones",
                              uiOutput("migration_range_selectors") ,
                              sliderInput("delta", 
                                          label = "Delta",
-                                         min = 0, max = 6, value = 0)
+                                         min = 0, max = 10, value = 0)
                            ),
                            
                            mainPanel( fluidPage(
