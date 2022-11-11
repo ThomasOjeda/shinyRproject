@@ -72,8 +72,4 @@ server <- function(input, output) {
     
   })
 
-  
-
-  
-  
 }
