@@ -32,4 +32,9 @@ obtainUnits = function() {
   return(c("Exactas","Economicas","Humanas","Veterinarias","Ingeniería","Salud"))
 }
 
+obtainUnits2 = function() {
+  
+  return(c("NINGUNA","FAA", "DER", "FSC" ,"VET" ,"EXA", "UEQ" ,"EST", "ESS", "FIO", "FCE" ,"FCH"))
+}
+
 
