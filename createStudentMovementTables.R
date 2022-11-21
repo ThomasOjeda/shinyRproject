@@ -157,20 +157,12 @@ createStudentMovementTablesV3 = function (lowerYear=1,upperYear=2,selectedOrigin
     select(DOCUMENTO, UNIDAD, CARRERA, SEXO = SEXO.x)
 
   #Habra algunos de los registrados como movimientos que tambien seran registrados como reenrolled.
+  #Deuda tecnica: cambiarle el nombre de movidos a "aparecen en ambos registros"
   
   movedToDifferentOffer = filteredLowerYearAppearances %>% 
     inner_join(filteredUpperYearAppearances,
                by=c("DOCUMENTO")) %>% 
     select(DOCUMENTO, SEXO = SEXO.x, UNIDAD.ORIGEN = UNIDAD.x, UNIDAD.DESTINO=UNIDAD.y, CARRERA.ORIGEN = CARRERA.x, CARRERA.DESTINO = CARRERA.y)
-  
-  
-  #Hay alumnos que se INSCRIBEN de nuevo a la misma carrera (no reinscripcion), que se estan considerando movimientos. El siguiente
-  #Codigo los cambia de movimientos a rematriculaciones
-  
-  # enrolledAgainOnSameOffer = movedToDifferentOffer %>% filter(UNIDAD.ORIGEN == UNIDAD.DESTINO,CARRERA.ORIGEN == CARRERA.DESTINO)
-  # movedToDifferentOffer = setdiff(movedToDifferentOffer,enrolledAgainOnSameOffer)
-  # reenrolledOnSameOffer = union(reenrolledOnSameOffer,enrolledAgainOnSameOffer%>%select(DOCUMENTO,UNIDAD=UNIDAD.ORIGEN,CARRERA = CARRERA.ORIGEN,SEXO))
-  # 
   
   #Los desertores son los que se inscribieron en el primer año y luego no tuvieron ningun tipo de aparicion en el año superior
   #Lo hago con una diferencia de conjuntos
@@ -193,5 +185,53 @@ createStudentMovementTablesV3 = function (lowerYear=1,upperYear=2,selectedOrigin
   
   
   return (list(reenrolledOnSameOffer=reenrolledOnSameOffer,movedToDifferentOffer=movedToDifferentOffer,deserted=deserted))
+  
+}
+
+
+
+createStudentMovementTablesVSimple = function (lowerYear=1,upperYear=2, selectedGenre = NULL,selectedOriginUnit = NULL, selectedOriginOffer = NULL,
+                                          selectedDestinationUnit = NULL, selectedDestinationOffer = NULL) { 
+  # 
+  #   lowerYear=1
+  #   upperYear=2
+  #   selectedOriginUnit = NULL
+  #   selectedOriginOffer = NULL
+  #   selectedDestinationUnit = NULL
+  #   selectedDestinationOffer = NULL
+  
+  #tambien se debe ver que el tipo del segundo dataset sea reinscripto, hay gente que se inscribe 1 año y al año siguiente de nuevo.
+  #Si no hago ese filtrado entonces tomo como que una segunda inscripcion equivale a una rematriculacion
+  #EN el segundo dataset 37370585 esta repetido como si se hubiera inscripto por primera vez dos veces, no le encuentro sentido. Si
+  #llega a ser un problema habria que hacer un unique.
+  #Tener en cuenta que se podrian hacer las operaciones en un orden distinto para aumentar el rendimiento
+  
+  filteredLowerYearAppearances = cleanAndFilter(year=lowerYear,enrollmentType = "I", selectedGenre= selectedGenre
+                                                , selectedUnit = selectedOriginUnit,selectedOffer = selectedOriginOffer)
+  
+  filteredUpperYearAppearances = cleanAndFilter(year=upperYear,selectedUnit=selectedDestinationUnit,selectedOffer=selectedDestinationOffer)
+  
+  reenrolledOnSameOffer = filteredLowerYearAppearances %>% 
+    inner_join(filteredUpperYearAppearances,
+               by=c("DOCUMENTO","CARRERA","UNIDAD")) %>%
+    select(DOCUMENTO, UNIDAD, CARRERA, SEXO = SEXO.x)
+  
+  #Habra algunos de los registrados como movimientos que tambien seran registrados como reenrolled.
+  #Deuda tecnica: cambiarle el nombre de movidos a "aparecen en ambos registros"
+  
+  movedToDifferentOffer = filteredLowerYearAppearances %>% 
+    inner_join(filteredUpperYearAppearances,
+               by=c("DOCUMENTO")) %>% 
+    select(DOCUMENTO, SEXO = SEXO.x, UNIDAD.ORIGEN = UNIDAD.x, UNIDAD.DESTINO=UNIDAD.y, CARRERA.ORIGEN = CARRERA.x, CARRERA.DESTINO = CARRERA.y)
+  
+  #Puede ocurrir que un alumno que se inscribio a mas de una carrera en el primer periodo luego se haya inscrito 
+  #a otras (mas de una) carrera, por lo que hay que filtrar pasajes de carrera repetidos en caso de que se quiera considerar esos
+  #casos como un solo cambio de oferta
+  #En caso de que el alumno se haya inscrito en 2 ofertas y haya renovado 1, entonces aparecera tanto en la lista de rematriculados
+  #como en la lista de movimientos a distinta oferta. PREGUNTAR!!!!!!
+  #Hay que continuar procesando estas tablas obtenidas para poder hacer la estadistica por estos "problemas de consistencia"
+  
+  
+  return (list(reenrolledOnSameOffer=reenrolledOnSameOffer,movedToDifferentOffer=movedToDifferentOffer))
   
 }

@@ -10,14 +10,18 @@ ui = navbarPage("Movimientos entre ofertas academicas",
                                    choices = list("1 año" = 1, "2 años" = 2,"3 años" = 3),
                                    selected = 1
                                    ),
+                       selectInput("genre_mov_selector", label="Genero", choices = c("Todos","Masculino","Femenino")),
                        uiOutput("origin_unit_mov_selector"),
                        uiOutput("destination_unit_mov_selector"),
                        actionButton("mov_stats_update_button", "Calcular")
                        
                      ),
                      mainPanel(
-                       plotOutput("general_student_movement_ratios"),
-                       #plotOutput("general_student_movement_ratios2")
+
+                       plotOutput("general_student_movement_ratios_simple")
+                       #,plotOutput("general_student_movement_ratios_simple_M")
+                       #,plotOutput("general_student_movement_ratios_simple_F")
+                       
                      )
                    )
                    
