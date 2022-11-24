@@ -192,13 +192,14 @@ createStudentMovementTablesV3 = function (lowerYear=1,upperYear=2,selectedOrigin
 
 createStudentMovementTablesVSimple = function (lowerYear=1,upperYear=2, selectedGenre = NULL,selectedOriginUnit = NULL, selectedOriginOffer = NULL,
                                           selectedDestinationUnit = NULL, selectedDestinationOffer = NULL) { 
-  # 
-  #   lowerYear=1
-  #   upperYear=2
-  #   selectedOriginUnit = NULL
-  #   selectedOriginOffer = NULL
-  #   selectedDestinationUnit = NULL
-  #   selectedDestinationOffer = NULL
+
+    # lowerYear=1
+    # upperYear=2
+    # selectedGenre= NULL
+    # selectedOriginUnit = NULL
+    # selectedOriginOffer = NULL
+    # selectedDestinationUnit = NULL
+    # selectedDestinationOffer = NULL
   
   #tambien se debe ver que el tipo del segundo dataset sea reinscripto, hay gente que se inscribe 1 año y al año siguiente de nuevo.
   #Si no hago ese filtrado entonces tomo como que una segunda inscripcion equivale a una rematriculacion
@@ -212,16 +213,14 @@ createStudentMovementTablesVSimple = function (lowerYear=1,upperYear=2, selected
   filteredUpperYearAppearances = cleanAndFilter(year=upperYear,selectedUnit=selectedDestinationUnit,selectedOffer=selectedDestinationOffer)
   
   reenrolledOnSameOffer = filteredLowerYearAppearances %>% 
-    inner_join(filteredUpperYearAppearances,
-               by=c("DOCUMENTO","CARRERA","UNIDAD")) %>%
+    inner_join(filteredUpperYearAppearances, by=c("DOCUMENTO","CARRERA","UNIDAD")) %>%
     select(DOCUMENTO, UNIDAD, CARRERA, SEXO = SEXO.x)
   
   #Habra algunos de los registrados como movimientos que tambien seran registrados como reenrolled.
   #Deuda tecnica: cambiarle el nombre de movidos a "aparecen en ambos registros"
   
   movedToDifferentOffer = filteredLowerYearAppearances %>% 
-    inner_join(filteredUpperYearAppearances,
-               by=c("DOCUMENTO")) %>% 
+    inner_join(filteredUpperYearAppearances, by=c("DOCUMENTO")) %>% 
     select(DOCUMENTO, SEXO = SEXO.x, UNIDAD.ORIGEN = UNIDAD.x, UNIDAD.DESTINO=UNIDAD.y, CARRERA.ORIGEN = CARRERA.x, CARRERA.DESTINO = CARRERA.y)
   
   #Puede ocurrir que un alumno que se inscribio a mas de una carrera en el primer periodo luego se haya inscrito 
