@@ -15,8 +15,8 @@ cleanAndFilter = function(year = 1,enrollmentType = NULL, selectedGenre = NULL,s
   if (!is.null(selectedOffer))
     result = result %>% filter(`CARRERA` == selectedOffer)
   
-  #Descarta posibles filas duplicadas
-  result = distinct(result,DOCUMENTO,CARRERA,UNIDAD,.keep_all=TRUE)
+  #Descarta posibles filas duplicadas. Ahora mismo en desuso ya que no parece tener ningun beneficio
+  #result = distinct(result,DOCUMENTO,CARRERA,UNIDAD,.keep_all=TRUE)
   
   return (result)
 }

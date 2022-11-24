@@ -1,5 +1,13 @@
 
+library(shinyjs)
+
+jsCode <- 'shinyjs.winprint = function(){
+window.print();
+}'
+
+
 ui = navbarPage("Movimientos entre ofertas academicas",
+
           tabPanel("Estadisticas de movimientos generales",
                    sidebarLayout(
                      sidebarPanel(
@@ -13,15 +21,18 @@ ui = navbarPage("Movimientos entre ofertas academicas",
                        selectInput("genre_mov_selector", label="Genero", choices = c("Todos","Masculino","Femenino")),
                        uiOutput("origin_unit_mov_selector"),
                        uiOutput("destination_unit_mov_selector"),
-                       actionButton("mov_stats_update_button", "Calcular")
+                       actionButton("mov_stats_update_button", "Calcular"),
+                       useShinyjs(),
+                       extendShinyjs(text = jsCode, functions = c("winprint")),
+                       actionButton("print", "Imprimir")
                        
                      ),
                      mainPanel(
 
-                       plotOutput("general_student_movement_ratios_simple")
+                       plotOutput("general_student_movement_ratios_simple"),
                        #,plotOutput("general_student_movement_ratios_simple_M")
                        #,plotOutput("general_student_movement_ratios_simple_F")
-                       
+
                      )
                    )
                    

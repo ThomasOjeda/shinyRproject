@@ -11,6 +11,9 @@ server <- function(input, output) {
   ###Se hace que yd sea una variable global para que pueda ser accedida incluso desde otros ambitos.(operador <<-)
   yd <<- readRDS("yearlyData.RDS")
   
+  observeEvent(input$print, {
+    js$winprint()
+  })
   
   update_mov_stats <- eventReactive(input$mov_stats_update_button, {
     

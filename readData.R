@@ -24,8 +24,8 @@ readData = function (filename) {
   
 }
 
-### Esta version indica al cargador de excel que debe interpretar los documentos como strings, lo que evita que algunos valores de 
-### documento no numericos pasen al dataset como NA.
+### Esta version mejorada indica al cargador de excel que debe interpretar los documentos como strings, lo que evita que algunos valores de 
+### documento no numericos pasen al dataset con valor NA.
 
 readData2 = function (filename) {
   #Cargar todas las hojas del documento 
