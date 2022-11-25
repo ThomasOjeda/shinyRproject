@@ -50,7 +50,7 @@ server <- function(input, output) {
   # })
   
   
-  output$general_student_movement_ratios_simple <- renderPlot ({
+  output$general_student_movement_ratios_pie <- renderPlot ({
 
     inputs = update_mov_stats()
     lowerYear = inputs$general_mov_stats_year
@@ -72,10 +72,20 @@ server <- function(input, output) {
     ###ESTO HAY QUE CAMBIARLO PORQUE ESTA HORRIBLE EL CODIGO (pero por ahora anda...)
 
 
-    names(ratios) = c("Inscriptos","Rematriculados","Movimientos","SinDatos","Porcent.Rematriculados","Porcent.Movimientos","Porcent.SinDatos")
-    grid.arrange(tableGrob(data.frame(ratios),rows=NULL),
-                 createPieChart2(unlist(ratios[2:4]),unlist(ratios[5:7]))
-)
+    names(ratios) = c("Inscriptos","Rematriculados","Movimientos","Sin_Datos","Porcentaje_Rematriculados","Porcentaje_Movimientos","Porcentaje_SinDatos")
+    # grid.arrange(tableGrob(data.frame(ratios),rows=NULL),
+    #              createPieChart2(unlist(ratios[2:4]),unlist(ratios[5:7]))
+    
+    output$general_student_movement_ratios_info <- renderTable({
+      ratiosTable = data.frame(ratios)
+      ratiosTable$Porcentaje_Rematriculados = format(round(ratiosTable$Porcentaje_Rematriculados,4),nsmall=4)
+      ratiosTable$Porcentaje_Movimientos = format(round(ratiosTable$Porcentaje_Movimientos,4),nsmall=4)
+      ratiosTable$Porcentaje_SinDatos = format(round(ratiosTable$Porcentaje_SinDatos,4),nsmall=4)
+      
+      return (ratiosTable)
+    })
+    
+    createPieChart2(unlist(ratios[2:4]),unlist(ratios[5:7]))
     
 
   })

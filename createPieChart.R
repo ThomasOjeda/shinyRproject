@@ -22,11 +22,11 @@ createPieChart2 = function(labeledNumbers,labeledPercentages) {
   pieLabels = paste(labeledPercentages,"%",labelNames)
 
   dataForPie <- data.frame(
-    group=pieLabels,
+    situacion=pieLabels,
     val=dataForPie
   )
   
-  ggplot(dataForPie, aes(x="", y=val, fill=group)) +
+  ggplot(dataForPie, aes(x="", y=val, fill=situacion)) +
     geom_bar(stat="identity", width=1, color="white") +
     coord_polar("y", start=0) +
     theme_void() + # remove background, grid, numeric labels
