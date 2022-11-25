@@ -11,9 +11,9 @@ server <- function(input, output) {
   ###Se hace que yd sea una variable global para que pueda ser accedida incluso desde otros ambitos.(operador <<-)
   yd <<- readRDS("yearlyData.RDS")
   
-  observeEvent(input$print, {
-    js$winprint()
-  })
+  observeEvent(input$printPage, {
+    js$printWindow()
+  }) 
   
   update_mov_stats <- eventReactive(input$mov_stats_update_button, {
     
@@ -73,8 +73,10 @@ server <- function(input, output) {
 
 
     names(ratios) = c("Inscriptos","Rematriculados","Movimientos","SinDatos","Porcent.Rematriculados","Porcent.Movimientos","Porcent.SinDatos")
-    grid.arrange(tableGrob(data.frame(ratios),rows=NULL),createPieChart(ratios[2:4]),nrow=4)
-
+    grid.arrange(tableGrob(data.frame(ratios),rows=NULL),
+                 createPieChart2(unlist(ratios[2:4]),unlist(ratios[5:7]))
+)
+    
 
   })
   
@@ -98,7 +100,7 @@ server <- function(input, output) {
     
     
     names(ratios) = c("Rematriculados","Movimientos","SinDatos","Porcent.Reinscriptos","Porcent.Movimientos","Porcent.SinDatos")
-    grid.arrange(tableGrob(data.frame(ratios),rows=NULL),createPieChart(ratios[1:3]),nrow=4)
+    grid.arrange(tableGrob(data.frame(ratios),rows=NULL),createPieChart2(unlist(ratios[1:3])),nrow=4)
     
     
   })
@@ -123,7 +125,7 @@ server <- function(input, output) {
     
     
     names(ratios) = c("Rematriculados","Movimientos","SinDatos","Porcent.Reinscriptos","Porcent.Movimientos","Porcent.SinDatos")
-    grid.arrange(tableGrob(data.frame(ratios),rows=NULL),createPieChart(ratios[1:3]),nrow=4)
+    grid.arrange(tableGrob(data.frame(ratios),rows=NULL),createPieChart2(unlist(ratios[1:3])),nrow=4)
     
     
   })

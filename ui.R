@@ -1,16 +1,16 @@
 
 library(shinyjs)
 
-jsCode <- 'shinyjs.winprint = function(){
+jsCode <- 'shinyjs.printWindow = function(){
 window.print();
 }'
 
 
 ui = navbarPage("Movimientos entre ofertas academicas",
 
-          tabPanel("Estadisticas de movimientos generales",
+          tabPanel("Estadisticas de movimientos",
                    sidebarLayout(
-                     sidebarPanel(
+                     sidebarPanel(#style = paste0("width: 30%"),
                        uiOutput("year_mov_selector"),
                   
                        radioButtons("general_mov_stats_delta", 
@@ -23,8 +23,8 @@ ui = navbarPage("Movimientos entre ofertas academicas",
                        uiOutput("destination_unit_mov_selector"),
                        actionButton("mov_stats_update_button", "Calcular"),
                        useShinyjs(),
-                       extendShinyjs(text = jsCode, functions = c("winprint")),
-                       actionButton("print", "Imprimir")
+                       extendShinyjs(text = jsCode, functions = c("printWindow")),
+                       actionButton("printPage", "Imprimir")
                        
                      ),
                      mainPanel(
