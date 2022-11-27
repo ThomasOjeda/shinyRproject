@@ -10,6 +10,7 @@ server <- function(input, output) {
   
   ###Se hace que yd sea una variable global para que pueda ser accedida incluso desde otros ambitos.(operador <<-)
   yd <<- readRDS("yearlyData.RDS")
+  #yd <<- readRDS("datos_test.RDS")
   
   observeEvent(input$printPage, {
     js$printWindow()
@@ -22,6 +23,46 @@ server <- function(input, output) {
                  genre_mov_stats_selector = input$genre_mov_selector,
                  origin_unit_mov_selector=input$origin_unit_mov_selector,
                  destination_unit_mov_selector=input$destination_unit_mov_selector))
+  })
+  
+  output$general_student_movement_ratios_pie <- renderPlot ({
+    
+    inputs = update_mov_stats()
+    lowerYear = inputs$general_mov_stats_year
+    upperYear = inputs$general_mov_stats_year + as.numeric(inputs$general_mov_stats_delta)
+    selectedGenre = inputs$genre_mov_stats_selector
+    selectedOriginUnit = inputs$origin_unit_mov_selector
+    selectedDestinationUnit = inputs$destination_unit_mov_selector
+    
+    if(selectedOriginUnit=="Todas") selectedOriginUnit = NULL
+    if(selectedDestinationUnit=="Todas") selectedDestinationUnit = NULL
+    
+    if(selectedGenre == "Todos") selectedGenre = NULL
+    else if (selectedGenre == "Masculino") selectedGenre = "M"
+    else selectedGenre = "F"
+    
+    ratios = computeGeneralMovementRatiosSimple(lowerYear,upperYear,selectedGenre=selectedGenre,selectedOriginUnit=selectedOriginUnit,selectedDestinationUnit=selectedDestinationUnit)
+    
+    
+    ###ESTO HAY QUE CAMBIARLO PORQUE ESTA HORRIBLE EL CODIGO (pero por ahora anda...)
+    
+    
+    names(ratios) = c("Inscriptos","Rematriculados","Movimientos","Sin_Datos","Porcentaje_Rematriculados","Porcentaje_Movimientos","Porcentaje_SinDatos")
+    # grid.arrange(tableGrob(data.frame(ratios),rows=NULL),
+    #              createPieChart2(unlist(ratios[2:4]),unlist(ratios[5:7]))
+    
+    output$general_student_movement_ratios_info <- renderTable({
+      ratiosTable = data.frame(ratios)
+      ratiosTable$Porcentaje_Rematriculados = format(round(ratiosTable$Porcentaje_Rematriculados,4),nsmall=4)
+      ratiosTable$Porcentaje_Movimientos = format(round(ratiosTable$Porcentaje_Movimientos,4),nsmall=4)
+      ratiosTable$Porcentaje_SinDatos = format(round(ratiosTable$Porcentaje_SinDatos,4),nsmall=4)
+      
+      return (ratiosTable)
+    })
+    
+    createPieChart2(unlist(ratios[2:4]),unlist(ratios[5:7]))
+    
+    
   })
   
   ###Este codigo es para probar otra version del creador de tablas
@@ -50,15 +91,18 @@ server <- function(input, output) {
   # })
   
   
-  output$general_student_movement_ratios_pie <- renderPlot ({
 
+  
+  ##CODIGO DE TESTEO de generacion de tablas teniendo en cuenta solo dni y carrera.
+  output$general_student_movement_ratios_pie_TEST <- renderPlot ({
+    
     inputs = update_mov_stats()
     lowerYear = inputs$general_mov_stats_year
     upperYear = inputs$general_mov_stats_year + as.numeric(inputs$general_mov_stats_delta)
     selectedGenre = inputs$genre_mov_stats_selector
     selectedOriginUnit = inputs$origin_unit_mov_selector
     selectedDestinationUnit = inputs$destination_unit_mov_selector
-
+    
     if(selectedOriginUnit=="Todas") selectedOriginUnit = NULL
     if(selectedDestinationUnit=="Todas") selectedDestinationUnit = NULL
     
@@ -66,17 +110,17 @@ server <- function(input, output) {
     else if (selectedGenre == "Masculino") selectedGenre = "M"
     else selectedGenre = "F"
     
-    ratios = computeGeneralMovementRatiosSimple(lowerYear,upperYear,selectedGenre=selectedGenre,selectedOriginUnit=selectedOriginUnit,selectedDestinationUnit=selectedDestinationUnit)
-
-
+    ratios = computeGeneralMovementRatiosSimple_TEST(lowerYear,upperYear,selectedGenre=selectedGenre,selectedOriginUnit=selectedOriginUnit,selectedDestinationUnit=selectedDestinationUnit)
+    
+    
     ###ESTO HAY QUE CAMBIARLO PORQUE ESTA HORRIBLE EL CODIGO (pero por ahora anda...)
-
-
+    
+    
     names(ratios) = c("Inscriptos","Rematriculados","Movimientos","Sin_Datos","Porcentaje_Rematriculados","Porcentaje_Movimientos","Porcentaje_SinDatos")
     # grid.arrange(tableGrob(data.frame(ratios),rows=NULL),
     #              createPieChart2(unlist(ratios[2:4]),unlist(ratios[5:7]))
     
-    output$general_student_movement_ratios_info <- renderTable({
+    output$general_student_movement_ratios_info_TEST <- renderTable({
       ratiosTable = data.frame(ratios)
       ratiosTable$Porcentaje_Rematriculados = format(round(ratiosTable$Porcentaje_Rematriculados,4),nsmall=4)
       ratiosTable$Porcentaje_Movimientos = format(round(ratiosTable$Porcentaje_Movimientos,4),nsmall=4)
@@ -87,7 +131,7 @@ server <- function(input, output) {
     
     createPieChart2(unlist(ratios[2:4]),unlist(ratios[5:7]))
     
-
+    
   })
   
   ###Codigo para calcular estadisticas solo de hombres

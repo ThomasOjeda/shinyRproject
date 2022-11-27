@@ -29,7 +29,9 @@ ui = navbarPage("Movimientos entre ofertas academicas",
                      ),
                      mainPanel(
                        plotOutput("general_student_movement_ratios_pie"),
-                       tableOutput("general_student_movement_ratios_info")
+                       tableOutput("general_student_movement_ratios_info"),
+                       #plotOutput("general_student_movement_ratios_pie_TEST"),
+                       #tableOutput("general_student_movement_ratios_info_TEST")
                        #,plotOutput("general_student_movement_ratios_simple_M")
                        #,plotOutput("general_student_movement_ratios_simple_F")
 

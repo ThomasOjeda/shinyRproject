@@ -1,7 +1,7 @@
 
 
 
-readData = function (filename) {
+readData = function () {
   #Cargar todas las hojas del documento 
   
   sheetNames = readxl::excel_sheets("data.xlsx")
@@ -27,19 +27,21 @@ readData = function (filename) {
 ### Esta version mejorada indica al cargador de excel que debe interpretar los documentos como strings, lo que evita que algunos valores de 
 ### documento no numericos pasen al dataset con valor NA.
 
-readData2 = function (filename) {
+readData2 = function () {
+  
+  filename = "prueba.xlsx"
   #Cargar todas las hojas del documento 
   
-  sheetNames = readxl::excel_sheets("data.xlsx")
+  sheetNames = readxl::excel_sheets(filename)
   
   yearlyData = lapply(sheetNames, function(x) {
     
-    nms = names(readxl::read_excel("data.xlsx",sheet=x, n_max = 0))
+    nms = names(readxl::read_excel(filename,sheet=x, n_max = 0))
     
     #Se configura un vector que indica que el nro documento debe leerse como texto
     ct <- ifelse(nms=="DOCUMENTO", "text", "guess")
     
-    return (readxl::read_excel("data.xlsx", sheet=x, col_types = ct))
+    return (readxl::read_excel(filename, sheet=x, col_types = ct))
     
   }
     
@@ -54,7 +56,7 @@ readData2 = function (filename) {
     
   }
   
-  saveRDS(yearlyData, file= "yearlyData.RDS")
+  saveRDS(yearlyData, file= "datos_test.RDS")
   
 }
 
