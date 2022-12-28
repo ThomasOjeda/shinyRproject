@@ -5,10 +5,10 @@ account: thomasojeda05
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 7135712
-bundleId: 6555110
+bundleId: 6678853
 url: https://thomasojeda05.shinyapps.io/shinyRproject/
-when: 1669405799.26689
-lastSyncTime: 1669405799.2669
+when: 1672244700.73438
+lastSyncTime: 1672244700.73439
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: agronomia.xlsx|arte.xlsx|data.xlsx|datos migraciones ofuscado.xlsx|derecho.xlsx|economicas.xlsx|exactas.xlsx|humanas.xlsx|ingenieria.xlsx|loadEcoDataset.R|loadExaDataset.R|loadHumDataset.R|loadIngDataset.R|loadSalDataset.R|loadVetDataset.R|obtainDataFromUnit(legacy).R|quequen.xlsx|README.md|salud.xlsx|sociales(mal_formato).xlsx|tests/shinytest.R|veterinarias.xlsx
+ignoredFiles: data.xlsx|obtainDataFromUnit(legacy).R|README.md|tests/shinytest.R

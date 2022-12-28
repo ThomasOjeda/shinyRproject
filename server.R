@@ -43,13 +43,8 @@ server <- function(input, output) {
     
     ratios = computeGeneralMovementRatiosSimple(lowerYear,upperYear,selectedGenre=selectedGenre,selectedOriginUnit=selectedOriginUnit,selectedDestinationUnit=selectedDestinationUnit)
     
-    
-    ###ESTO HAY QUE CAMBIARLO PORQUE ESTA HORRIBLE EL CODIGO (pero por ahora anda...)
-    
-    
     names(ratios) = c("Inscriptos","Rematriculados","Movimientos","Sin_Datos","Porcentaje_Rematriculados","Porcentaje_Movimientos","Porcentaje_SinDatos")
-    # grid.arrange(tableGrob(data.frame(ratios),rows=NULL),
-    #              createPieChart2(unlist(ratios[2:4]),unlist(ratios[5:7]))
+
     
     output$general_student_movement_ratios_info <- renderTable({
       ratiosTable = data.frame(ratios)
@@ -65,125 +60,6 @@ server <- function(input, output) {
     
   })
   
-  ###Este codigo es para probar otra version del creador de tablas
-  # output$general_student_movement_ratios <- renderPlot ({
-  #   
-  # inputs = update_mov_stats()  
-  # lowerYear = inputs$general_mov_stats_year  
-  # upperYear = inputs$general_mov_stats_year + as.numeric(inputs$general_mov_stats_delta)
-  # 
-  # selectedOriginUnit = inputs$origin_unit_mov_selector
-  # selectedDestinationUnit = inputs$destination_unit_mov_selector
-  # 
-  # if(selectedOriginUnit=="Todas") selectedOriginUnit = NULL
-  # if(selectedDestinationUnit=="Todas") selectedDestinationUnit = NULL
-  # 
-  # ratios = computeGeneralMovementRatios(lowerYear,upperYear,selectedOriginUnit=selectedOriginUnit,selectedDestinationUnit=selectedDestinationUnit)  
-  # 
-  # 
-  # ###ESTO HAY QUE CAMBIARLO PORQUE ESTA HORRIBLE EL CODIGO (pero por ahora anda...)
-  # 
-  # 
-  # names(ratios) = c("Rematriculados","Movimientos","SinDatos","Porcent.Reinscriptos","Porcent.Movimientos","Porcent.SinDatos")
-  # grid.arrange(tableGrob(data.frame(ratios),rows=NULL),createPieChart(ratios[1:3]),nrow=4)
-  # 
-  #   
-  # })
-  
-  
-
-  
-  ##CODIGO DE TESTEO de generacion de tablas teniendo en cuenta solo dni y carrera.
-  output$general_student_movement_ratios_pie_TEST <- renderPlot ({
-    
-    inputs = update_mov_stats()
-    lowerYear = inputs$general_mov_stats_year
-    upperYear = inputs$general_mov_stats_year + as.numeric(inputs$general_mov_stats_delta)
-    selectedGenre = inputs$genre_mov_stats_selector
-    selectedOriginUnit = inputs$origin_unit_mov_selector
-    selectedDestinationUnit = inputs$destination_unit_mov_selector
-    
-    if(selectedOriginUnit=="Todas") selectedOriginUnit = NULL
-    if(selectedDestinationUnit=="Todas") selectedDestinationUnit = NULL
-    
-    if(selectedGenre == "Todos") selectedGenre = NULL
-    else if (selectedGenre == "Masculino") selectedGenre = "M"
-    else selectedGenre = "F"
-    
-    ratios = computeGeneralMovementRatiosSimple_TEST(lowerYear,upperYear,selectedGenre=selectedGenre,selectedOriginUnit=selectedOriginUnit,selectedDestinationUnit=selectedDestinationUnit)
-    
-    
-    ###ESTO HAY QUE CAMBIARLO PORQUE ESTA HORRIBLE EL CODIGO (pero por ahora anda...)
-    
-    
-    names(ratios) = c("Inscriptos","Rematriculados","Movimientos","Sin_Datos","Porcentaje_Rematriculados","Porcentaje_Movimientos","Porcentaje_SinDatos")
-    # grid.arrange(tableGrob(data.frame(ratios),rows=NULL),
-    #              createPieChart2(unlist(ratios[2:4]),unlist(ratios[5:7]))
-    
-    output$general_student_movement_ratios_info_TEST <- renderTable({
-      ratiosTable = data.frame(ratios)
-      ratiosTable$Porcentaje_Rematriculados = format(round(ratiosTable$Porcentaje_Rematriculados,4),nsmall=4)
-      ratiosTable$Porcentaje_Movimientos = format(round(ratiosTable$Porcentaje_Movimientos,4),nsmall=4)
-      ratiosTable$Porcentaje_SinDatos = format(round(ratiosTable$Porcentaje_SinDatos,4),nsmall=4)
-      
-      return (ratiosTable)
-    })
-    
-    createPieChart2(unlist(ratios[2:4]),unlist(ratios[5:7]))
-    
-    
-  })
-  
-  ###Codigo para calcular estadisticas solo de hombres
-  output$general_student_movement_ratios_simple_M <- renderPlot ({
-    
-    inputs = update_mov_stats()
-    lowerYear = inputs$general_mov_stats_year
-    upperYear = inputs$general_mov_stats_year + as.numeric(inputs$general_mov_stats_delta)
-    selectedGenre = inputs$genre_mov_stats_selector
-    selectedOriginUnit = inputs$origin_unit_mov_selector
-    selectedDestinationUnit = inputs$destination_unit_mov_selector
-    
-    if(selectedOriginUnit=="Todas") selectedOriginUnit = NULL
-    if(selectedDestinationUnit=="Todas") selectedDestinationUnit = NULL
-    
-    ratios = computeGeneralMovementRatiosSimple(lowerYear,upperYear,selectedGenre="M",selectedOriginUnit=selectedOriginUnit,selectedDestinationUnit=selectedDestinationUnit)
-    
-    
-    ###ESTO HAY QUE CAMBIARLO PORQUE ESTA HORRIBLE EL CODIGO (pero por ahora anda...)
-    
-    
-    names(ratios) = c("Rematriculados","Movimientos","SinDatos","Porcent.Reinscriptos","Porcent.Movimientos","Porcent.SinDatos")
-    grid.arrange(tableGrob(data.frame(ratios),rows=NULL),createPieChart2(unlist(ratios[1:3])),nrow=4)
-    
-    
-  })
-  
-  ###Codigo para calcular estadisticas solo de mujeres
-  output$general_student_movement_ratios_simple_F <- renderPlot ({
-    
-    inputs = update_mov_stats()
-    lowerYear = inputs$general_mov_stats_year
-    upperYear = inputs$general_mov_stats_year + as.numeric(inputs$general_mov_stats_delta)
-    selectedGenre = inputs$genre_mov_stats_selector
-    selectedOriginUnit = inputs$origin_unit_mov_selector
-    selectedDestinationUnit = inputs$destination_unit_mov_selector
-    
-    if(selectedOriginUnit=="Todas") selectedOriginUnit = NULL
-    if(selectedDestinationUnit=="Todas") selectedDestinationUnit = NULL
-    
-    ratios = computeGeneralMovementRatiosSimple(lowerYear,upperYear,selectedGenre="F",selectedOriginUnit=selectedOriginUnit,selectedDestinationUnit=selectedDestinationUnit)
-    
-    
-    ###ESTO HAY QUE CAMBIARLO PORQUE ESTA HORRIBLE EL CODIGO (pero por ahora anda...)
-    
-    
-    names(ratios) = c("Rematriculados","Movimientos","SinDatos","Porcent.Reinscriptos","Porcent.Movimientos","Porcent.SinDatos")
-    grid.arrange(tableGrob(data.frame(ratios),rows=NULL),createPieChart2(unlist(ratios[1:3])),nrow=4)
-    
-    
-  })
-  
   output$year_mov_selector <- renderUI({
     
     return(selectInput("year_mov_selector", label="Año", choices = obtainYears()))
@@ -194,7 +70,7 @@ server <- function(input, output) {
     return(selectInput("origin_unit_mov_selector", label="Filtro unidad primer año", choices = obtainUnits2()))
   })
   
-  ###No se usa todavia
+  ###No se usa 
   output$origin_offer_mov_selector <- renderUI({
     
     processedData = obtainProcessedDataFromUnit(input$unit_hist)
@@ -207,82 +83,13 @@ server <- function(input, output) {
     return(selectInput("destination_unit_mov_selector", label="Filtro unidad año destino", choices = obtainUnits2()))
   })
   
-  ###No se usa todavia
+  ###No se usa 
   output$destination_offer_mov_selector <- renderUI({
     
     processedData = obtainProcessedDataFromUnit(input$unit_hist)
     
     return(selectInput("destination_offer_mov_selector", label="Oferta", choices = processedData$student_distribution_sorted$CARRERA))
   })
-  
-  
-
-  
-  
-  output$migration_data <- renderTable ( {
-    
-    processedData = obtainProcessedDataFromUnit(input$migration_unit_selector)
-
-    migrationTable = createMigrationTable(processedData$hashed_data,processedData$student_distribution_sorted,input$start_year,input$delta)
-    
-    output$migration_pie_chart <- renderPlot({
-      
-      
-      return (createMigrationPieChart(migrationTable))
-      
-    })
-    
-    return (migrationTable)
-    
-  })
-  
-  output$migration_history <- renderPlot({
-    
-    processedData = obtainProcessedDataFromUnit(input$unit_hist)
-
-    return(createDegreeMigrationHistory(processedData$hashed_data,input$degree_hist))
-    
-  })
-  
-  
-  output$network <- renderPlot({
-    
-    
-    return(createRelationshipNetwork())
-    
-  })
-  
-  output$unit_hist_selector <- renderUI({
-    
-    return(selectInput("unit_hist", label="Unidad academica", choices = obtainUnits()))
-  })
-  
-  output$degree_hist_selector <- renderUI({
-    
-    processedData = obtainProcessedDataFromUnit(input$unit_hist)
-    
-    return(selectInput("degree_hist", label="Carrera", choices = processedData$student_distribution_sorted$CARRERA))
-  })
-  
-  
-  
-  output$migrations_unit_selector <- renderUI({
-    
-    return(selectInput("migration_unit_selector", label="Unidad academica", choices = obtainUnits()))
-    
-  })
-  
-  output$migration_range_selectors <- renderUI({
-    processedData = obtainProcessedDataFromUnit(input$migration_unit_selector)
-    
-    return(
-      sliderInput("start_year", 
-                  label = "Año de comienzo",
-                  min = as.numeric(colnames(processedData$student_distribution_sorted)[2]), 
-                  max = as.numeric(colnames(processedData$student_distribution_sorted)[ncol(processedData$student_distribution_sorted)]), 
-                  value = as.numeric(colnames(processedData$student_distribution_sorted)[ncol(processedData$student_distribution_sorted)]))
-    )
-    
-  })
+   
 
 }

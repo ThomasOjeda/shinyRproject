@@ -1,30 +1,6 @@
 
 
-
-readData = function () {
-  #Cargar todas las hojas del documento 
-  
-  sheetNames = readxl::excel_sheets("data.xlsx")
-  
-  yearlyData = lapply(sheetNames, function(x) 
-    
-    return (readxl::read_excel("data.xlsx", sheet=x))
-  )
-  
-  yearlyDataSize = length(yearlyData)
-  
-  for (i in 1:yearlyDataSize){
-    colnames(yearlyData[[i]])[4] = "TIPO DOC"
-    colnames(yearlyData[[i]])[8] = "TIPO INS"
-    yearlyData[[i]]$DOCUMENTO = as.character(yearlyData[[i]]$DOCUMENTO)
-    
-  }
-  
-  saveRDS(yearlyData, file= "yearlyData.RDS")
-  
-}
-
-### Esta version mejorada indica al cargador de excel que debe interpretar los documentos como strings, lo que evita que algunos valores de 
+### Indica al cargador de excel que debe interpretar los documentos como strings, lo que evita que algunos valores de 
 ### documento no numericos pasen al dataset con valor NA.
 
 readData2 = function () {
@@ -52,8 +28,7 @@ readData2 = function () {
   for (i in 1:yearlyDataSize){
     colnames(yearlyData[[i]])[4] = "TIPO DOC"
     colnames(yearlyData[[i]])[8] = "TIPO INS"
-    #earlyData[[i]]$DOCUMENTO = as.character(yearlyData[[i]]$DOCUMENTO)
-    
+
   }
   
   saveRDS(yearlyData, file= "datos_test.RDS")
@@ -61,7 +36,6 @@ readData2 = function () {
 }
 
 ### Igual que readData2 pero con el arreglo de ingenieria de sistemas en quequen
-
 
 readData3 = function () {
   
@@ -88,15 +62,12 @@ readData3 = function () {
   for (i in 1:yearlyDataSize){
     colnames(yearlyData[[i]])[4] = "TIPO DOC"
     colnames(yearlyData[[i]])[8] = "TIPO INS"
-    #earlyData[[i]]$DOCUMENTO = as.character(yearlyData[[i]]$DOCUMENTO)
-    
+
     #Modificación para incluir a los alumnos de ingenieria de quequen en el calculo de ingenieria de exactas.
     yearlyData[[i]]["UNIDAD"][yearlyData[[i]]["UNIDAD"] == "UEQ" & yearlyData[[i]]["CARRERA"] == "Ciclo Inicial en Ingeniería"] = "EXA"
     yearlyData[[i]]["CARRERA"][yearlyData[[i]]["UNIDAD"] == "EXA" & yearlyData[[i]]["CARRERA"] == "Ciclo Inicial en Ingeniería"] = "Ingeniería de Sistemas"
     
   }
-  
-
   
 
   saveRDS(yearlyData, file= "yearlyData.RDS")
